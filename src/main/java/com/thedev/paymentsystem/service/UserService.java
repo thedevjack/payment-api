@@ -1,6 +1,7 @@
 package com.thedev.paymentsystem.service;
 
 
+import com.thedev.paymentsystem.dto.UserResponse;
 import com.thedev.paymentsystem.entity.User;
 import com.thedev.paymentsystem.repository.UserRepository;
 import com.thedev.paymentsystem.utils.RandomString;
@@ -23,7 +24,7 @@ public class UserService {
         return getAll;
     }
 
-    public User registerUser(User user) {
+    public UserResponse registerUser(User user) {
         if (userRepository.findByEmail(user.getEmail()) != null) {
             throw new RuntimeException("This email already exists!");
         } else {
@@ -36,7 +37,14 @@ public class UserService {
 
             User saveUser = userRepository.save(user);
 
-            return saveUser;
+            UserResponse userResponse = new UserResponse(
+                    saveUser.getId(),
+                    saveUser.getName(),
+                    saveUser.getEmail(),
+                    saveUser.getPassword()
+            );
+
+            return userResponse;
         }
     }
 
